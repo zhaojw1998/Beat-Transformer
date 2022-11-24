@@ -12,9 +12,11 @@ This repository is organized as follows:
 root
 │
 └───checkpoint                          PyTorch model checkpoints
+    │   ···
 │   
 └───code
     └───ablation_models                 ablation models
+        │   ···                            
     │   DilatedTransformer.py           Beat Transformer model
     │   DilatedTransformerLayer.py      Dilated Self-Attention
     │   spectrogram_dataset.py          data loader
@@ -23,12 +25,15 @@ root
 │   
 └───data
     └───audio_lists                     Order info of pieces in each dataset
+        │   ···                     
     │   demix_spectrogram_data.npz      demixed spectrogram data (33GB, to be downloaded)
     │   full_beat_annotation.npz        beat/downbeat annotation
 │   
 └───preprocessing                       code for data pre-processing
+    │   ···
 │   
 └───save                                training log and more
+    │   ···
 ```
 
 ## How to run
