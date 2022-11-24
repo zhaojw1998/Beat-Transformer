@@ -1,0 +1,3 @@
+Download our processed data at https://drive.google.com/file/d/1LamSAEY5QsnY57cF6qH_0niesGGKkHtI/view?usp=sharing
+Each piece is demixed into 5 stems and saved as spectrogram of shape (time, stem=5, mel_bin=128). 
+This file includes full processed spectrogram data from Ballroom, Hainsworth, Carnetic, Harmonix, SMC, and GTZAN.
