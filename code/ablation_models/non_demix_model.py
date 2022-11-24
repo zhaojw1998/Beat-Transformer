@@ -4,7 +4,7 @@ from DilatedTransformerLayer import DilatedTransformerLayer
 
 
 class DilatedTransformerModel(nn.Module):
-    def __init__(self, attn_len=5, ntoken=2, dmodel=256, nhead=2, d_hid=512, nlayers=9, norm_first=True, dropout=.1):
+    def __init__(self, attn_len=5, ntoken=2, dmodel=128, nhead=2, d_hid=512, nlayers=9, norm_first=True, dropout=.1):
         super(DilatedTransformerModel, self).__init__()
         self.nhead = nhead
         self.nlayers = nlayers
