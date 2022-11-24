@@ -166,11 +166,15 @@ def train(model, train_loader, optimizer, scheduler, loss_func, loss_tempo, clip
         optimizer.zero_grad()
         pred, tempo = model(data)
         #print(pred.shape, gt.shape)
-        loss = loss_func(pred, gt)
+        valid_gt = gt.clone()
+        valid_gt[gt == -1] = 0
+        loss = loss_func(pred, valid_gt)
         weight = (1 - torch.as_tensor(gt == -1, dtype=torch.int32)).to(device)
         loss = (weight * loss).mean(dim=(0, 1)).sum()
 
-        loss_t = loss_tempo(torch.softmax(tempo, dim=-1), tempo_gt)
+        valid_tempo_gt = tempo_gt.clone()
+        valid_tempo_gt[tempo_gt == -1] = 0
+        loss_t = loss_tempo(torch.softmax(tempo, dim=-1), valid_tempo_gt)
         weight = (1 - torch.as_tensor(tempo_gt == -1, dtype=torch.int32)).to(device)
         loss_t = (weight * loss_t).mean()
         #except RuntimeError:
@@ -264,11 +268,15 @@ def evaluate(model, val_loader, loss_func, loss_tempo, epoch, device):
 
             pred, tempo = model(data)
             
-            loss = loss_func(pred, gt)
+            valid_gt = gt.clone()
+            valid_gt[gt == -1] = 0
+            loss = loss_func(pred, valid_gt)
             weight = (1 - torch.as_tensor(gt == -1, dtype=torch.int32)).to(device)
             loss = (weight * loss).mean(dim=(0, 1)).sum()
 
-            loss_t = loss_tempo(torch.softmax(tempo, dim=-1), tempo_gt)
+            valid_tempo_gt = tempo_gt.clone()
+            valid_tempo_gt[tempo_gt == -1] = 0
+            loss_t = loss_tempo(torch.softmax(tempo, dim=-1), valid_tempo_gt)
             weight = (1 - torch.as_tensor(tempo_gt == -1, dtype=torch.int32)).to(device)
             loss_t = (weight * loss_t).mean()
             #except RuntimeError:

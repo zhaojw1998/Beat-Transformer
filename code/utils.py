@@ -81,17 +81,21 @@ def infer_beat_with_DBN(beat_pred, beat_gt, dbn_model, fps):
         #    continue
         if np.sum(beat_gt[idx]) < 2:
             continue
-        beat_pred_batch = dbn_model(beat_pred[idx])
+        try:
+            beat_pred_batch = dbn_model(beat_pred[idx])
+        except:
+            return {"fmeasure": 0, "cmlt": 0, "amlt": 0}
         beat_gt_batch = np.nonzero(beat_gt[idx])[0] / fps
         score = madmom.evaluation.beats.BeatEvaluation(beat_pred_batch, beat_gt_batch)
         batch_score.append(score)
     batch_score = madmom.evaluation.beats.BeatMeanEvaluation(batch_score)
-    return {"fmeasure": batch_score.fmeasure, \
+    return {"fmeasure": batch_score.fmeasure if not np.isnan(batch_score.fmeasure) else 0, \
             #"cemgil": batch_score.cemgil, \
             #"cmlc": batch_score.cmlc, \
-            "cmlt": batch_score.cmlt, \
+            "cmlt": batch_score.cmlt if not np.isnan(batch_score.cmlt) else 0, \
             #"amlc": batch_score.amlc, \
-            "amlt": batch_score.amlt}
+            "amlt": batch_score.amlt if not np.isnan(batch_score.amlt) else 0}
+
 
 def infer_downbeat_with_DBN(beat_pred, downbeat_pred, downbeat_gt, dbn_model, fps):
     #beat_pred: (B, L), estimation result
@@ -113,18 +117,17 @@ def infer_downbeat_with_DBN(beat_pred, downbeat_pred, downbeat_gt, dbn_model, fp
             beat_pred_batch = dbn_model(combined_act[idx])
             beat_pred_batch = beat_pred_batch[beat_pred_batch[:, 1]==1][:, 0]
         except:
-            return {"fmeasure": 0, "cemgil": 0, "cmlc": 0, "cmlt": 0, "amlc": 0, "amlt": 0}
+            return {"fmeasure": 0, "cmlt": 0, "amlt": 0}
         beat_gt_batch = np.nonzero(beat_gt[idx])[0] / fps
         score = madmom.evaluation.beats.BeatEvaluation(beat_pred_batch, beat_gt_batch)
         batch_score.append(score)
     batch_score = madmom.evaluation.beats.BeatMeanEvaluation(batch_score)
-    return {"fmeasure": batch_score.fmeasure, \
+    return {"fmeasure": batch_score.fmeasure if not np.isnan(batch_score.fmeasure) else 0, \
             #"cemgil": batch_score.cemgil, \
             #"cmlc": batch_score.cmlc, \
-            "cmlt": batch_score.cmlt, \
+            "cmlt": batch_score.cmlt if not np.isnan(batch_score.cmlt) else 0, \
             #"amlc": batch_score.amlc, \
-            "amlt": batch_score.amlt}
-
+            "amlt": batch_score.amlt if not np.isnan(batch_score.amlt) else 0}
 
 
 
