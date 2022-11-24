@@ -1,0 +1,11 @@
+data/demix_spectrogram_data.npz
+save/inference/inference_pred.pkl
+save/train_log
+checkpoint/fold_0_trf_param.pt
+checkpoint/fold_1_trf_param.pt
+checkpoint/fold_2_trf_param.pt
+checkpoint/fold_3_trf_param.pt
+checkpoint/fold_4_trf_param.pt
+checkpoint/fold_5_trf_param.pt
+checkpoint/fold_6_trf_param.pt
+checkpoint/fold_7_trf_param.pt
