@@ -22,7 +22,7 @@ warnings.filterwarnings('ignore')
 DEBUG_MODE = int(sys.argv[1])
 FOLD = int(sys.argv[2])
 GPU = int(sys.argv[3])
-PROJECT_NAME = 'Beat_Transformer-demix-dilated_self_attention'
+PROJECT_NAME = 'Beat_Transformer'
 
 ###############################################################################
 # Load config
