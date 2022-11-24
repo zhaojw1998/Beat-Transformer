@@ -1,5 +1,4 @@
 data/demix_spectrogram_data.npz
-checkpoint/fold_4_trf_param.pt
 checkpoint/fold_5_trf_param.pt
 checkpoint/fold_6_trf_param.pt
 checkpoint/fold_7_trf_param.pt
