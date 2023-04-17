@@ -23,7 +23,8 @@ class dataset_processing(Dataset):
                     fps=44100/1024,
                     sample_size = 512,
                     num_folds=8,
-                    mask_value=-1  
+                    mask_value=-1,
+                    test_only = []  
                     ):
         self.fold = fold
         self.num_folds = num_folds
@@ -40,21 +41,21 @@ class dataset_processing(Dataset):
 
         if self.mode == 'train':
             self.dataset_name = []
-            self.train_clip(full_data, full_annotation)
+            self.train_clip(full_data, full_annotation, test_only=test_only)
         
         elif self.mode == 'validation' or self.mode == 'test':
             self.dataset_name = []
             self.audio_files = []
-            self.val_and_test_clip(full_data, full_annotation, audio_files)
+            self.val_and_test_clip(full_data, full_annotation, audio_files, test_only=test_only)
 
         full_data = None
         full_annotation = None
             
-    def train_clip(self, full_data, full_annotation, num_tempo_bins=300):
+    def train_clip(self, full_data, full_annotation, num_tempo_bins=300, test_only=[]):
         for fold_idx in tqdm(range(self.num_folds)):
             if (fold_idx != self.fold) and (fold_idx != (self.fold+1)%self.num_folds):
                 for key in full_data:
-                    if key == 'gtzan':
+                    if key == test_only:
                         continue
                     #print(f'processing {key} under fold {fold_idx}')
                     for song_idx in range(len(full_data[key][fold_idx])):
@@ -128,14 +129,14 @@ class dataset_processing(Dataset):
 
         #print(len(self.data), len(self.beats), len(self.downbeats))
 
-    def val_and_test_clip(self, full_data, full_annotation, audio_files, num_tempo_bins=300):
+    def val_and_test_clip(self, full_data, full_annotation, audio_files, num_tempo_bins=300, test_only=[]):
         if self.mode == 'validation':
             fold_idx = (self.fold+1)%self.num_folds
         elif self.mode == 'test':
             fold_idx = self.fold
         for key in tqdm(full_data, total=len(full_data)):
             #print(f'processing {key}')
-            if ((self.mode == 'validation') and (key == 'gtzan')):
+            if ((self.mode == 'validation') and (key in test_only)):
                 continue
             for song_idx in range(len(full_data[key][fold_idx])):
                 song = full_data[key][fold_idx][song_idx]
@@ -299,6 +300,7 @@ class audioDataset(object):
         self.sample_size = sample_size
         self.mask_value = mask_value
         self.num_folds = num_folds
+        self.test_only_data = test_only_data
 
         load_linear_spectr = np.load(data_path, allow_pickle=True)
         load_annotation = np.load(annotation_path, allow_pickle=True)
@@ -323,7 +325,7 @@ class audioDataset(object):
                 self.full_data[key] = {}
                 self.full_annotation[key] = {}
                 self.audio_files[key] = {}
-                if key in test_only_data:
+                if key in self.test_only_data:
                     FOLD_SIZE = len(data) // num_folds
                     np.random.seed(SEED)
                     np.random.shuffle(data)
@@ -363,7 +365,8 @@ class audioDataset(object):
                                         fold=fold, 
                                         sample_size = self.sample_size,
                                         num_folds=self.num_folds,
-                                        mask_value=self.mask_value
+                                        mask_value=self.mask_value,
+                                        test_only=self.test_only_data
                                         )
 
         print('processing val_set')
@@ -375,7 +378,8 @@ class audioDataset(object):
                                         fold=fold, 
                                         sample_size=self.sample_size,
                                         num_folds=self.num_folds,
-                                        mask_value=self.mask_value
+                                        mask_value=self.mask_value,
+                                        test_only=self.test_only_data
                                         )
 
         print('processing test_set')
@@ -387,7 +391,8 @@ class audioDataset(object):
                                         fold=fold, 
                                         sample_size=self.sample_size,
                                         num_folds=self.num_folds,
-                                        mask_value=self.mask_value
+                                        mask_value=self.mask_value,
+                                        test_only=self.test_only_data
                                         )
         return train_set, val_set, test_set
 
