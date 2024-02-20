@@ -56,7 +56,7 @@ We use a total of 7 datasets for model training and testing. If you wish to acqu
 
 * SMC Dataset (audio) is available [here](https://joserzapata.github.io/publication/selective-sampling-beat-tracking/).
 
-* Carnetic Dataset (audio) is on [Zenodo](https://zenodo.org/record/1264394). You can download it by request.
+* Carnatic Dataset (audio) is on [Zenodo](https://zenodo.org/record/1264394). You can download it by request.
 
 * Harmonix Dataset (mel-spectrogram) is available [here](https://github.com/urinieto/harmonixset). I used the Griffin-Lim algorithm in Librosa to convert mel-spectrogram to audio, which (however) is lossful. My conversion code is [here](https://github.com/zhaojw1998/Beat-Transformer/blob/main/preprocessing/harmonix_mel2wav.py).
 
